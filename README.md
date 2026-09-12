@@ -4,7 +4,9 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-🚀 **Live Deployment (Vercel):** [https://flam-adaptive-layout-engine-assignm.vercel.app](https://flam-adaptive-layout-engine-assignm.vercel.app)
+🚀 **Live Deployment:** [https://IzhanRuaif.github.io/Flam-Adaptive-Layout-Engine-Assignment](https://IzhanRuaif.github.io/Flam-Adaptive-Layout-Engine-Assignment)
+
+📈 **Algorithm Math (Desmos):** [https://www.desmos.com/calculator/qygdlculkf](https://www.desmos.com/calculator/qygdlculkf)
 
 ---
 

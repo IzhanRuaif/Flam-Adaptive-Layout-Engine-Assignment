@@ -26,6 +26,13 @@ function App() {
   const [customH, setCustomH] = useState(400);
   const [renderer, setRenderer] = useState<'DOM' | 'Canvas'>('DOM');
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [windowW, setWindowW] = useState(typeof window !== 'undefined' ? window.innerWidth : 800);
+
+  useEffect(() => {
+    const handleResize = () => setWindowW(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Derive the active surface profile
   const activeSurface = useMemo(() => {
@@ -256,7 +263,7 @@ function App() {
           }} />
           
           <div style={{
-            transform: `scale(${Math.min(1, 800 / activeSurface.width, 600 / activeSurface.height)})`,
+            transform: `scale(${Math.min(1, (windowW <= 768 ? windowW - 40 : 800) / activeSurface.width, (windowW <= 768 ? 400 : 600) / activeSurface.height)})`,
             transformOrigin: 'center center',
             transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
             position: 'relative',

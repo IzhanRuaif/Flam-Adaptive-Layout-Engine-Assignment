@@ -61,13 +61,15 @@ function App() {
     }}>
       {/* Minimalist Header */}
       <header style={{
-        padding: '0 2rem',
-        height: '64px',
+        padding: '1rem 2rem',
+        minHeight: '64px',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e5e7eb',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
         zIndex: 10,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -117,17 +119,9 @@ function App() {
         </div>
       </header>
 
-      <main style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <main className="app-main">
         {/* Clean Sidebar Controls */}
-        <aside style={{
-          width: '340px',
-          backgroundColor: '#ffffff',
-          borderRight: '1px solid #e5e7eb',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          zIndex: 5,
-        }}>
+        <aside className="app-sidebar">
           <div style={{ padding: '2rem 1.5rem' }}>
             <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#6b7280', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Settings2 size={14} /> Known Surfaces
@@ -251,15 +245,7 @@ function App() {
         </aside>
 
         {/* Renderer Canvas */}
-        <section style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'auto',
-          position: 'relative',
-          backgroundColor: '#f3f4f6',
-        }}>
+        <section className="app-content">
           {/* Subtle dot pattern */}
           <div style={{
             position: 'absolute',

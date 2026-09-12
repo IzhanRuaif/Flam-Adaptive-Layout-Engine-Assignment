@@ -1,51 +1,60 @@
-# Adaptive Layout Engine
+# 🌌 Flam Adaptive Layout Engine
 
-A constraint-based multi-surface layout engine built in TypeScript and React. It takes a single declarative ad spec and automatically resolves it into fundamentally different layouts (like rows, columns, or grids) based on the specific constraints of a surface.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-## Features
-- **Zero CSS Media Queries for Layout**: The layout structural decisions are calculated entirely in TypeScript via a Weighted Binary Space Partitioning algorithm.
-- **Priority-Based Degradation**: Gracefully drops lower-priority elements when space is insufficient, rather than overlapping or clipping.
-- **Strictly Typed**: `AdSpec`, `SurfaceProfile`, and the resulting `ResolvedLayout` are fully typed.
-- **Framework Agnostic Core**: The `resolver.ts` is purely mathematical and decoupled from React/DOM, making it compatible with Canvas or WebGL renderers.
+🚀 **Live Deployment (Vercel):** [https://flam-adaptive-layout-engine-assignm.vercel.app](https://flam-adaptive-layout-engine-assignm.vercel.app)
 
-## Setup Instructions
-1. Install dependencies: `npm install`
-2. Start the development server: `npm run dev`
-3. Open `http://localhost:5173` to view the interactive dashboard.
+---
 
-## Demo Application
-The demo features a live surface picker:
-- **Mobile Portrait** (Tall, vertical stack)
-- **Mobile Landscape** (Square-ish, split layout)
-- **Broadcast Lower-Third** (Extreme wide, horizontal row)
-- **Retail Kiosk** (Square, split layout)
-- **Tiny Smartwatch** (Artificially constrained to demonstrate priority degradation)
+## 📖 Overview
+The **Adaptive Layout Engine** is a mathematical, framework-agnostic solving algorithm designed to take a single declarative Ad Specification and intelligently resolve it across wildly different aspect ratios, dimensions, and constraints (e.g., Mobile Interstitial, Broadcast Lower-Third, Retail Kiosks, Smartwatches). 
 
-## Resolution Flow
-`Ad Spec + Surface Profile -> Constraint Resolver -> Resolved Layout -> Renderer`
+Rather than relying on brittle CSS `@media` queries, this engine uses a **Square-Root Area-Scaling Algorithm** and **Heuristic Region Splitting** to compute exact `(x, y, w, h)` coordinates, ensuring zero visual overlap and maintaining premium aesthetic integrity on any surface.
 
-1. **Spec Definition**: Define elements with roles, priorities, and content.
-2. **Surface Constraints**: Provide physical dimensions and constraints (e.g. `minTapTarget`).
-3. **Constraint Resolver (`resolver.ts`)**: Applies the BSP layout algorithm to position and size elements.
-4. **Renderer (`render-dom.tsx`)**: Takes absolute `x,y,w,h` coordinates and renders the final pixels on screen using absolute CSS positioning (no flexbox/grid used for macro layout).
+---
 
-## Layout Algorithm
-The engine uses a **Weighted Binary Space Partitioning (BSP)** algorithm.
-1. **Degradation Phase**: It first calculates the minimum viable area for all active elements. If the total required area exceeds the surface area, it iteratively drops elements starting with the highest priority number (least important).
-2. **Partition Phase**: It recursively splits the available bounding box into two sub-boxes. 
-   - If the current box is tall (`h > w * 0.8`), it splits vertically.
-   - Otherwise, it splits horizontally.
-3. **Weight Allocation**: Elements are assigned a visual weight based on their role (e.g., `hero` is heavier than `branding`). The box split ratio is proportional to the combined weights of the elements assigned to each sub-box.
-4. **Resolution**: This recursion natively and organically creates Columns on tall surfaces, Rows on wide surfaces, and Split grids on square surfaces, without a single `if (surface === 'mobile')` statement.
+## ✨ Core Engineering Highlights
 
-## TypeScript Design
-- `spec.ts` defines discriminating unions for elements (`TextAdElement`, `ImageAdElement`, etc.) ensuring invalid roles or missing contents are compile-time errors.
-- `surfaces.ts` strongly types constraint profiles.
-- `resolver.ts` bridges them, ensuring the output (`ResolvedLayout`) requires no guesswork from the renderer.
+### 📐 1. Square-Root Area-Scaling Algorithm
+To prevent text from appearing microscopic on a 1080p kiosk or comically large on a tiny smartwatch, the engine computes a dynamic `scale` factor relative to a baseline mobile surface area:
+```typescript
+const BASE_AREA = 320 * 480;
+const areaScale = Math.sqrt((surface.width * surface.height) / BASE_AREA);
+const scale = Math.max(0.5, Math.min(areaScale, 3.5)); // Clamped for edge-case safety
+```
+This continuous algebraic scaling is applied to typography, intrinsic bounding boxes, flex gaps, and padding, ensuring flawless proportional aesthetics. 
 
-## Known Limitations
-- Text measurement is currently heuristic (based on approximate character widths and `minTextSize`) rather than using Canvas `measureText`.
-- Elements have basic padding/margin rules integrated directly into the split phase (via a `PADDING` constant) rather than per-element customizable margins.
+### 🔲 2. Dynamic Region Splitting
+The layout dynamically classifies the surface constraint by its aspect ratio (AR) and solves the flow accordingly:
+- **Tall / Square (AR <= 1.2):** Pure Column Flex-Flow. Automatically calculates `flex-grow` equivalents to vertically center the Hero Product exactly at the true geometric center.
+- **Wide (1.2 < AR < 2.5):** Left-Right Bounding Box split, ensuring horizontal space is perfectly distributed between media and copy.
+- **Extreme Wide (AR >= 2.5):** Single-row constraint flow, ideal for broadcast lower-thirds.
 
-## Time Spent
-~4 hours. Focused on building a robust, mathematically sound BSP solver and a polished "wow-factor" dashboard UI.
+### 📉 3. Priority-Based Degradation
+If a target surface lacks the physical space to render the layout without causing overlap (e.g., a 200x200 Smartwatch), the engine enters a deterministic degradation loop. It mathematically compresses gap spaces first, and if constraints still fail, it gracefully drops layout elements based on strict priority rankings (e.g., discarding the logo or price before dropping the CTA).
+
+### 🎨 4. Framework-Agnostic Architecture
+The solving logic (`resolver.ts`) is completely decoupled from the rendering layer. 
+- **DOM Renderer:** Bypasses browser layout engines by strictly using `position: absolute` with the solved coordinates.
+- **Canvas 2D Renderer:** Natively draws the Ad onto an HTML5 Canvas using identical engine coordinates. 
+*Both renderers are natively toggleable in the live UI.*
+
+---
+
+## 🛠️ Local Development
+
+Clone the repository and run the local development server:
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run the Vite development server
+npm run dev
+```
+
+---
+
+*Designed and engineered for the Flam UI/Frontend Engineering Assignment.*

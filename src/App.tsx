@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { surfaces } from './surfaces';
+import nikeSneaker from './assets/centered_nike_sneaker.jpg';
 import { defineAd } from './spec';
 import type { AdSpec } from './spec';
 import { resolveLayout } from './resolver';
@@ -9,7 +10,7 @@ import { Monitor, Smartphone, Watch, Settings2, Box, Info, Plus } from 'lucide-r
 
 const MOCK_AD: AdSpec = defineAd({
   elements: [
-    { id: 'product-image', type: 'image', role: 'hero', priority: 1, src: '/centered_nike_sneaker.jpg' },
+    { id: 'product-image', type: 'image', role: 'hero', priority: 1, src: nikeSneaker },
     { id: 'headline', type: 'text', role: 'primary', priority: 1, content: 'Nike Air Max 270' },
     { id: 'cta-btn', type: 'button', role: 'action', priority: 2, content: 'Shop Now' },
     { id: 'price', type: 'text', role: 'secondary', priority: 2, content: 'Starting at $150' },
